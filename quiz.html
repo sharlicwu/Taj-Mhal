@@ -65,7 +65,7 @@
     <div class="start-screen" id="startScreen">
         <div style="font-size: 60px;">🕌</div>
         <h1>Taj Mahal Word Challenge</h1>
-        <p>15 words, 15 seconds each. How many can you get?</p>
+        <p>15 words, 20 seconds each. How many can you get?</p>
         <button class="start-btn" onclick="startGame()">START 🚀</button>
     </div>
 
@@ -75,7 +75,7 @@
             <div class="timer-area">
                 <div class="timer-ring">
                     <svg width="60" height="60"><circle class="timer-bg" cx="30" cy="30" r="25"/><circle class="timer-progress" id="timerCircle" cx="30" cy="30" r="25"/></svg>
-                    <div class="timer-text" id="timer">15</div>
+                    <div class="timer-text" id="timer">20</div>
                 </div>
             </div>
             <span class="score-bar" id="scoreBar">⭐ 0</span>
@@ -131,7 +131,7 @@ var maxStreak = 0;
 var correctCount = 0;
 var timer = null;
 var musicTimer = null;
-var timeLeft = 15;
+var timeLeft = 20;
 var audioCtx = null;
 
 function getAudioCtx() {
@@ -169,11 +169,11 @@ function startCountdownMusic() {
         var gain = ctx.createGain();
         osc.connect(gain);
         gain.connect(ctx.destination);
-        if (timeLeft > 8) {
+        if (timeLeft > 12) {
             osc.frequency.value = 80; gain.gain.value = 0.15;
             osc.start(); osc.stop(ctx.currentTime + 0.1);
             musicTimer = setTimeout(playBeat, 800);
-        } else if (timeLeft > 4) {
+        } else if (timeLeft > 6) {
             osc.frequency.value = 100; gain.gain.value = 0.2;
             osc.start(); osc.stop(ctx.currentTime + 0.08);
             musicTimer = setTimeout(playBeat, 400);
@@ -256,7 +256,7 @@ function loadQuestion() {
         grid.appendChild(btn);
     }
     setTimeout(function() { speak(q.word); }, 300);
-    timeLeft = 15;
+    timeLeft = 20;
     document.getElementById('timer').innerText = timeLeft;
     document.getElementById('timerCircle').style.strokeDashoffset = '0';
     document.getElementById('timerCircle').style.stroke = '#ffd54f';
@@ -265,9 +265,9 @@ function loadQuestion() {
     timer = setInterval(function() {
         timeLeft--;
         document.getElementById('timer').innerText = timeLeft;
-        var offset = 157 - (157 * (15 - timeLeft) / 15);
+        var offset = 157 - (157 * (20 - timeLeft) / 20);
         document.getElementById('timerCircle').style.strokeDashoffset = offset;
-        if (timeLeft <= 5) { document.getElementById('timerCircle').style.stroke = '#e53935'; }
+        if (timeLeft <= 7) { document.getElementById('timerCircle').style.stroke = '#e53935'; }
         if (timeLeft <= 0) { clearInterval(timer); stopCountdownMusic(); playTimeUpSound(); timeUp(); }
     }, 1000);
 }
@@ -288,7 +288,7 @@ function checkAnswer(btn) {
     btns.forEach(function(b) { b.classList.add('disabled'); });
     if (answer === q.zh) {
         btn.classList.add('correct');
-        var bonus = timeLeft >= 10 ? 15 : timeLeft >= 5 ? 10 : 5;
+        var bonus = timeLeft >= 14 ? 15 : timeLeft >= 7 ? 10 : 5;
         score += bonus; streak++; correctCount++;
         if (streak > maxStreak) maxStreak = streak;
         playCorrectSound();
